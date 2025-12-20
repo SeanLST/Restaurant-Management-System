@@ -1,0 +1,171 @@
+-- 1. Create the Database
+
+CREATE DATABASE IF NOT EXISTS the_wellington;
+
+USE the_wellington;
+
+-- 2. Create Users Table (Stores both Staff and Customers)
+
+CREATE TABLE users (
+
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+
+    username VARCHAR(50) NOT NULL UNIQUE,
+
+    password VARCHAR(255) NOT NULL, -- In real app, use password_hash()
+
+    full_name VARCHAR(100) NOT NULL,
+
+    email VARCHAR(100),
+
+    role ENUM('staff', 'customer') DEFAULT 'customer',
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+);
+
+-- 3. Create Restaurant Tables (Physical tables in the room)
+
+CREATE TABLE restaurant_tables (
+
+    table_id INT AUTO_INCREMENT PRIMARY KEY,
+
+    table_number VARCHAR(10) NOT NULL,
+
+    capacity INT NOT NULL, -- e.g., 2 seater, 4 seater
+
+    status ENUM('available', 'occupied', 'reserved') DEFAULT 'available'
+
+);
+
+-- 4. Create Menu Table
+
+CREATE TABLE menu (
+
+    item_id INT AUTO_INCREMENT PRIMARY KEY,
+
+    name VARCHAR(100) NOT NULL,
+
+    description TEXT,
+
+    price DECIMAL(10, 2) NOT NULL,
+
+    category VARCHAR(50) -- e.g., 'Main Course', 'Starter'
+
+);
+
+-- 5. Create Reservations Table
+
+CREATE TABLE reservations (
+
+    reservation_id INT AUTO_INCREMENT PRIMARY KEY,
+
+    user_id INT, -- Links to the Customer
+
+    table_id INT, -- Links to the Physical Table
+
+    reservation_date DATE NOT NULL,
+
+    reservation_time TIME NOT NULL,
+
+    guests INT NOT NULL,
+
+    status ENUM('pending', 'confirmed', 'completed', 'cancelled') DEFAULT 'pending',
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+
+    FOREIGN KEY (table_id) REFERENCES restaurant_tables(table_id)
+
+);
+
+-- 6. Create Reservation Orders (The Pre-ordered Food)
+
+CREATE TABLE reservation_orders (
+
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+
+    reservation_id INT,
+
+    item_id INT, -- Links to Menu
+
+    quantity INT DEFAULT 1,
+
+    FOREIGN KEY (reservation_id) REFERENCES reservations(reservation_id) ON DELETE CASCADE,
+
+    FOREIGN KEY (item_id) REFERENCES menu(item_id)
+
+);
+
+-- ==========================================
+
+-- DUMMY DATA (To test your website immediately)
+
+-- ==========================================
+
+-- Insert Staff and Customer
+-- NOTE: Passwords MUST be hashed using PHP password_hash() function
+-- Staff login credentials: username='staff', password='admin123'
+-- Customer login credentials: username='customer', password='123'
+-- 
+-- IMPORTANT: Run this PHP script first to generate the correct password hashes:
+-- php generate_password_hash.php
+-- 
+-- Then copy the generated hashes into the INSERT statement below.
+-- 
+-- Example hashes (these are examples - generate your own for security):
+-- 'admin123' hash: $2y$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy
+-- '123' hash: $2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi
+
+INSERT INTO users (username, password, full_name, email, role) VALUES 
+
+('staff', '$2y$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Gordon Ramsay', 'chef@wellington.com', 'staff'),
+
+('customer', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'John Doe', 'john@gmail.com', 'customer');
+
+-- Insert Restaurant Tables
+
+INSERT INTO restaurant_tables (table_number, capacity) VALUES 
+
+('T1', 2), ('T2', 2), ('T3', 4), ('T4', 4), ('T5', 6), ('T6', 6), ('VIP1', 8);
+
+-- Insert Menu Items
+
+INSERT INTO menu (name, description, price, category) VALUES 
+
+('Beef Wellington', 'Classic filet steak coated in pâté and duxelles, wrapped in puff pastry.', 55.00, 'Main'),
+('Chicken Wellington', 'Oven-baked chicken breast with spinach and cheese filling.', 32.00, 'Main'),
+('Salmon Wellington', 'Fresh salmon fillet with dill cream wrapped in pastry.', 48.00, 'Main'),
+('Mini Mushroom Wellington', 'Vegetarian option with sauteed mushroom duxelles.', 25.00, 'Main'),
+('Grilled Ribeye Steak', '240g ribeye with herb butter.', 58.00, 'Main'),
+('Herb-Roasted Chicken', 'Slow-roasted chicken thigh with rosemary and thyme.', 28.00, 'Main'),
+('Pan-Seared Seabass', 'Served with lemon butter sauce.', 35.00, 'Main'),
+('Spaghetti Carbonara', 'Classic carbonara with smoked beef bacon.', 22.00, 'Pasta'),
+('Spaghetti Aglio Olio', 'Garlic, chili, olive oil with prawns.', 24.00, 'Pasta'),
+('Classic Caesar Salad', 'Romaine, parmesan, croutons.', 16.00, 'Starter'),
+('Wild Mushroom Soup', 'Creamy soup with truffle oil.', 14.00, 'Starter'),
+('Bruschetta', 'Tomato, basil and balsamic glaze.', 12.00, 'Starter'),
+('Smoked Salmon Bites', 'Dill cream, pickled shallot.', 18.00, 'Starter'),
+('Garlic Herb Bread Basket', 'House-made bread with garlic butter.', 10.00, 'Starter'),
+('Truffle Fries', 'Hand cut fries tossed in truffle oil.', 12.00, 'Side'),
+('Crème Brûlée', 'Vanilla bean custard with caramelized sugar.', 16.00, 'Dessert'),
+('Molten Chocolate Cake', 'Warm chocolate fondant with vanilla gelato.', 18.00, 'Dessert'),
+('Tiramisu Wellington Style', 'Coffee-soaked ladyfingers, mascarpone cream.', 20.00, 'Dessert');
+
+-- Insert a Test Reservation (Customer John, Table T1)
+
+INSERT INTO reservations (user_id, table_id, reservation_date, reservation_time, guests, status) 
+
+VALUES 
+(2, 1, CURDATE(), '19:00:00', 2, 'confirmed'),
+(2, 3, DATE_ADD(CURDATE(), INTERVAL 1 DAY), '20:00:00', 4, 'pending');
+
+-- Insert Pre-Orders for reservations above
+
+INSERT INTO reservation_orders (reservation_id, item_id, quantity) VALUES 
+(1, 1, 1),  -- Beef Wellington
+(1, 10, 1), -- Classic Caesar Salad
+(2, 5, 2),  -- Grilled Ribeye
+(2, 17, 2); -- Molten Chocolate Cake
+
