@@ -471,7 +471,7 @@ if (loginFormEl) {
         formData.append('password', password);
         
         // Submit login
-        fetch('login_process.php', {
+        fetch('login/login_process.php', {
             method: 'POST',
             body: formData
         })
@@ -483,8 +483,24 @@ if (loginFormEl) {
                 // Redirect based on role
                 setTimeout(() => {
                     if (data.role === 'staff') {
-                        // Staff go to staff dashboard
-                        window.location.href = 'staff.php';
+                        // Check staff role for specific redirects (case-insensitive)
+                        const staffRole = (data.staff_role || '').toString().toLowerCase().trim();
+                        console.log('Staff role from server:', data.staff_role, 'Normalized:', staffRole);
+                        
+                        // Files are in staff/ subdirectory, so use staff/ prefix
+                        if (staffRole === 'cashier') {
+                            // Cashiers go to cashier POS interface
+                            console.log('Redirecting to cashier interface');
+                            window.location.href = 'staff/cashier.php';
+                        } else if (staffRole === 'waiter') {
+                            // Waiters go to waiter interface
+                            console.log('Redirecting to waiter interface');
+                            window.location.href = 'staff/waiter.php';
+                        } else {
+                            // Other staff (chef, manager, etc.) go to staff dashboard
+                            console.log('Redirecting to general staff interface, staff_role was:', staffRole || '(not provided)');
+                            window.location.href = 'staff/staff.php';
+                        }
                     } else {
                         // Customers go directly to reservation page after login
                         window.location.href = 'reservation.php';
@@ -543,11 +559,26 @@ if (registerFormEl) {
         formData.append('role', 'customer'); // Always customer for public registration
         
         // Submit registration
-        fetch('register_process.php', {
+        fetch('login/register_process.php', {
             method: 'POST',
             body: formData
         })
-        .then(response => response.json())
+        .then(response => {
+            // Check if response is ok
+            if (!response.ok) {
+                throw new Error('HTTP error! status: ' + response.status);
+            }
+            // Try to parse as JSON
+            return response.text().then(text => {
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    // If not JSON, show the raw response (might be a PHP error)
+                    console.error('Non-JSON response:', text);
+                    throw new Error('Server returned invalid response. Check browser console for details.');
+                }
+            });
+        })
         .then(data => {
             if (data.status === 'success') {
                 showMessage('registerMessage', 'Account created successfully! You can now login.', 'success');
@@ -564,8 +595,8 @@ if (registerFormEl) {
             }
         })
         .catch(error => {
-            console.error('Error:', error);
-            showMessage('registerMessage', 'An error occurred. Please try again.', 'error');
+            console.error('Registration Error:', error);
+            showMessage('registerMessage', 'Error: ' + error.message + '. Please check browser console (F12) for details.', 'error');
         });
     });
 }
@@ -632,7 +663,17 @@ function closeLogoutModal() {
 }
 
 function confirmLogout() {
-    window.location.href = 'logout.php';
+    // Get current path and determine correct logout path
+    // logout.php is in the root directory (not in login/ subdirectory)
+    const currentPath = window.location.pathname;
+    let logoutPath = 'logout.php';
+    
+    // If we're in a subdirectory (reservation/, customer/, staff/), go up one level
+    if (currentPath.includes('/reservation/') || currentPath.includes('/customer/') || currentPath.includes('/staff/')) {
+        logoutPath = '../logout.php';
+    }
+    
+    window.location.href = logoutPath;
 }
 
 // ========================================================================

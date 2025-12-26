@@ -28,11 +28,14 @@
         <li><a href="reservation.php">RESERVATION</a></li>
         <?php endif; ?>
         <?php if(isset($_SESSION['user']) && $_SESSION['user'] === 'staff'): ?>
-        <li><a href="staff.php">STAFF</a></li>
+        <li><a href="staff/staff.php">STAFF</a></li>
         <?php endif; ?>
         <li><a href="about.php" class="active">ABOUT US</a></li>
         <li><a href="index.php#contact">CONTACT</a></li>
         <li><a href="menu.php">MENU</a></li>
+        <?php if(isset($_SESSION['user']) && $_SESSION['user'] === 'customer'): ?>
+        <li><a href="view_history.php">HISTORY</a></li>
+        <?php endif; ?>
     </ul>
     
     <?php if(isset($_SESSION['user'])): ?>

@@ -1,5 +1,9 @@
--- 1. Create the Database
+-- ========================================
+-- THE WELLINGTON DATABASE SETUP
+-- Database: thewellington1
+-- ========================================
 
+-- Create database if it doesn't exist
 CREATE DATABASE IF NOT EXISTS thewellington1;
 
 USE thewellington1;
@@ -238,111 +242,3 @@ CREATE TABLE kitchen (
     CONSTRAINT chk_positive_kitchen_quantity CHECK (quantity > 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci 
 COMMENT='Kitchen order queue';
-
-
--- ==========================================
-
--- DUMMY DATA (To test your website immediately)
-
--- ==========================================
-
-1️⃣ ACCOUNTS
-INSERT INTO accounts (username, password, role)
-VALUES
-('john_doe', 'hashed_password_123', 'customer'),
-('emma_lee', 'hashed_password_456', 'customer'),
-('admin01', 'hashed_admin_pw', 'staff'),
-('staff01', 'hashed_staff_pw', 'staff');
-
-2️⃣ MEMBERSHIPS (Customers)
-INSERT INTO memberships (account_id, member_name, email, phone, points)
-VALUES
-(1, 'John Doe', 'john@email.com', '0123456789', 120),
-(2, 'Emma Lee', 'emma@email.com', '0198765432', 80);
-
-3️⃣ STAFFS
-INSERT INTO staffs (account_id, staff_name, email, phone, role)
-VALUES
-(3, 'Admin User', 'admin@restaurant.com', '0111111111', 'Manager'),
-(4, 'Service Staff', 'staff@restaurant.com', '0222222222', 'Cashier');-- Insert Restaurant Tables
-
-INSERT INTO restaurant_tables (table_number, capacity) VALUES 
-
-('T1', 2), ('T2', 2), ('T3', 4), ('T4', 4), ('T5', 6), ('T6', 6), ;
-
--- Insert Menu Items
-
-INSERT INTO menu (name, description, price, category) VALUES 
-
-('Beef Wellington', 'Classic filet steak coated in pâté and duxelles, wrapped in puff pastry.', 55.00, 'Main'),
-('Chicken Wellington', 'Oven-baked chicken breast with spinach and cheese filling.', 32.00, 'Main'),
-('Salmon Wellington', 'Fresh salmon fillet with dill cream wrapped in pastry.', 48.00, 'Main'),
-('Mini Mushroom Wellington', 'Vegetarian option with sauteed mushroom duxelles.', 25.00, 'Main'),
-('Grilled Ribeye Steak', '240g ribeye with herb butter.', 58.00, 'Main'),
-('Herb-Roasted Chicken', 'Slow-roasted chicken thigh with rosemary and thyme.', 28.00, 'Main'),
-('Pan-Seared Seabass', 'Served with lemon butter sauce.', 35.00, 'Main'),
-('Spaghetti Carbonara', 'Classic carbonara with smoked beef bacon.', 22.00, 'Pasta'),
-('Spaghetti Aglio Olio', 'Garlic, chili, olive oil with prawns.', 24.00, 'Pasta'),
-('Classic Caesar Salad', 'Romaine, parmesan, croutons.', 16.00, 'Starter'),
-('Wild Mushroom Soup', 'Creamy soup with truffle oil.', 14.00, 'Starter'),
-('Bruschetta', 'Tomato, basil and balsamic glaze.', 12.00, 'Starter'),
-('Smoked Salmon Bites', 'Dill cream, pickled shallot.', 18.00, 'Starter'),
-('Garlic Herb Bread Basket', 'House-made bread with garlic butter.', 10.00, 'Starter'),
-('Truffle Fries', 'Hand cut fries tossed in truffle oil.', 12.00, 'Side'),
-('Crème Brûlée', 'Vanilla bean custard with caramelized sugar.', 16.00, 'Dessert'),
-('Molten Chocolate Cake', 'Warm chocolate fondant with vanilla gelato.', 18.00, 'Dessert'),
-('Tiramisu Wellington Style', 'Coffee-soaked ladyfingers, mascarpone cream.', 20.00, 'Dessert');
-
-6️⃣ TABLE_AVAILABILITY
-INSERT INTO table_availability (table_id, reservation_date, reservation_time, status)
-VALUES
-(1, '2025-01-05', '18:00:00', 'available'),
-(2, '2025-01-05', '18:00:00', 'available'),
-(3, '2025-01-05', '19:00:00', 'available'),
-(4, '2025-01-05', '20:00:00', 'available');
-
-7️⃣ RESERVATIONS
-
-👥 Party size ≤ 6
-
-INSERT INTO reservations (member_id, availability_id, party_size, special_requests)
-VALUES
-(1, 1, 2, 'Window seat preferred'),
-(2, 2, 4, 'Birthday celebration');
-
-8️⃣ UPDATE TABLE_AVAILABILITY (Link reservation)
-UPDATE table_availability
-SET reservation_id = 1, status = 'reserved'
-WHERE availability_id = 1;
-
-UPDATE table_availability
-SET reservation_id = 2, status = 'reserved'
-WHERE availability_id = 2;
-
-9️⃣ BILLS
-INSERT INTO bills (staff_id, reservation_id, total_amount, payment_status)
-VALUES
-(2, 1, 57.80, 'pending'),
-(2, 2, 78.50, 'pending');
-
-🔟 PAYMENT_TRANSACTIONS
-INSERT INTO payment_transactions
-(bill_id, payment_method, amount, payment_status, transaction_reference, verified_by)
-VALUES
-(1, 'credit_card', 57.80, 'verified', 'TXN10001', 2),
-(2, 'touch_n_go', 78.50, 'pending', 'TXN10002', NULL);
-
-1️⃣1️⃣ BILL_ITEMS
-INSERT INTO bill_items (bill_id, item_id, quantity, unit_price)
-VALUES
-(1, 1, 2, 28.90),
-(2, 2, 1, 35.50),
-(2, 5, 2, 14.50);
-
-1️⃣2️⃣ KITCHEN
-INSERT INTO kitchen (bill_item_id, item_id, quantity, status)
-VALUES
-(1, 1, 2, 'preparing'),
-(2, 2, 1, 'ready'),
-(3, 5, 2, 'preparing');
-

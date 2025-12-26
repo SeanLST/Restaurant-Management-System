@@ -41,7 +41,6 @@
             color: white;
             box-shadow: 0 4px 15px rgba(139, 111, 71, 0.3);
         }
-        
         /* Reservation Prompt Banner */
         .reservation-prompt-banner {
             max-width: 1200px;
@@ -116,7 +115,7 @@
         
         .btn-reservation-register:hover {
             background: white;
-            color: #667eea;
+            color: #152fa7ff;
             transform: translateY(-2px);
         }
         
@@ -139,7 +138,9 @@
         }
     </style>
 </head>
-<body>
+<body></body>
+        
+        
 
 <!-- Navigation -->
 <nav>

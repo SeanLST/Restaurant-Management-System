@@ -13,5 +13,6 @@ if (isset($_COOKIE[session_name()])) {
 session_destroy();
 
 // Redirect to home page
+// Since logout.php is in root directory, redirect to index.php in same directory
 header('Location: index.php');
 exit;

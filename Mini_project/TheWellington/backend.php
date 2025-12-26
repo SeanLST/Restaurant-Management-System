@@ -86,7 +86,7 @@ if ($action === 'logout') {
 // 3. HANDLE RESERVATION + ORDER SUBMISSION
 if ($action === 'reserve') {
     // Use PDO for reservation processing
-    $dsn = 'mysql:host=localhost;dbname=thewellingtondb;charset=utf8mb4';
+    $dsn = 'mysql:host=localhost;dbname=thewellingtondb1;charset=utf8mb4';
     $pdoUser = 'root';
     $pdoPass = '';
     try {
@@ -261,21 +261,34 @@ if ($action === 'reserve') {
             }
         }
         
-        // Handle membership points (10 points for phone number)
+        // Handle membership points - ALWAYS award 10 points for booking
         $pointsAwarded = 0;
-        if (!empty($phone)) {
-            $stmt = $pdo->prepare("SELECT member_id, point, user_id FROM membership WHERE phone_number = ? LIMIT 1");
-            $stmt->execute([$phone]);
+        if ($userId) {
+            // Check if membership exists for this user
+            $stmt = $pdo->prepare("
+                SELECT membership_id, points FROM Memberships 
+                WHERE user_id = ? LIMIT 1
+            ");
+            $stmt->execute([$userId]);
             $membership = $stmt->fetch();
             
             if ($membership) {
-                $newPoints = $membership['point'] + 10;
-                $stmt = $pdo->prepare("UPDATE membership SET point = ?, user_id = ? WHERE member_id = ?");
-                $stmt->execute([$newPoints, $userId, $membership['member_id']]);
+                // Update existing membership - add 10 points
+                $newPoints = (int)$membership['points'] + 10;
+                $stmt = $pdo->prepare("
+                    UPDATE Memberships 
+                    SET points = ? 
+                    WHERE membership_id = ?
+                ");
+                $stmt->execute([$newPoints, $membership['membership_id']]);
                 $pointsAwarded = 10;
             } else {
-                $stmt = $pdo->prepare("INSERT INTO membership (user_id, member_name, phone_number, point) VALUES (?, ?, ?, 10)");
-                $stmt->execute([$userId, $name, $phone]);
+                // Create new membership with 10 points
+                $stmt = $pdo->prepare("
+                    INSERT INTO Memberships (user_id, member_name, points) 
+                    VALUES (?, ?, 10)
+                ");
+                $stmt->execute([$userId, $name]);
                 $pointsAwarded = 10;
             }
         }

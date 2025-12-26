@@ -3673,16 +3673,187 @@ body.staff-panel-body nav {
     letter-spacing: 1px;
 }
 
+/* Reservation Prompt Banner - Wood Style */
+.reservation-prompt-banner {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 30px;
+}
+
+.reservation-prompt-content {
+    background: 
+        url('https://www.transparenttextures.com/patterns/wood-pattern.png'),
+        linear-gradient(135deg, #5A3A1A 0%, #3D2817 100%);
+    background-blend-mode: multiply;
+    border-radius: 16px;
+    padding: 35px 45px;
+    display: flex;
+    align-items: center;
+    gap: 35px;
+    box-shadow: 
+        0 8px 30px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(193, 154, 107, 0.2);
+    border: 3px solid #8B5A2B;
+    border-style: groove;
+    position: relative;
+    overflow: hidden;
+}
+
+.reservation-prompt-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 2px,
+        rgba(139, 90, 43, 0.05) 2px,
+        rgba(139, 90, 43, 0.05) 4px
+    );
+    pointer-events: none;
+}
+
+.reservation-prompt-icon {
+    font-size: 52px;
+    color: #C19A6B;
+    min-width: 70px;
+    z-index: 1;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 70px;
+    background: rgba(193, 154, 107, 0.15);
+    border-radius: 12px;
+    border: 2px solid #8B5A2B;
+}
+
+.reservation-prompt-text {
+    flex: 1;
+    color: #E6C9A8;
+    z-index: 1;
+}
+
+.reservation-prompt-text h3 {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    font-family: 'Cinzel', serif;
+    color: #C19A6B;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.reservation-prompt-text p {
+    font-size: 16px;
+    margin: 0;
+    color: #E6C9A8;
+    line-height: 1.5;
+}
+
+.reservation-prompt-buttons {
+    display: flex;
+    gap: 15px;
+    z-index: 1;
+}
+
+.btn-reservation-login,
+.btn-reservation-register {
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Cinzel', serif;
+}
+
+.btn-reservation-login {
+    background: 
+        url('https://www.transparenttextures.com/patterns/wood-pattern.png'),
+        linear-gradient(135deg, #C19A6B 0%, #8B5A2B 100%);
+    background-blend-mode: multiply;
+    color: #2A1810;
+    border: 2px solid #8B5A2B;
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(230, 201, 168, 0.3);
+}
+
+.btn-reservation-login:hover {
+    transform: translateY(-3px);
+    box-shadow: 
+        0 6px 20px rgba(139, 90, 43, 0.4),
+        inset 0 1px 0 rgba(230, 201, 168, 0.3);
+    background: 
+        url('https://www.transparenttextures.com/patterns/wood-pattern.png'),
+        linear-gradient(135deg, #D4AF37 0%, #C19A6B 100%);
+}
+
+.btn-reservation-register {
+    background: transparent;
+    color: #E6C9A8;
+    border: 2px solid #C19A6B;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-reservation-register:hover {
+    background: rgba(193, 154, 107, 0.15);
+    border-color: #E6C9A8;
+    color: #E6C9A8;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(193, 154, 107, 0.3);
+}
+
+@media (max-width: 768px) {
+    .reservation-prompt-content {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 25px;
+        gap: 25px;
+    }
+    
+    .reservation-prompt-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 40px;
+    }
+    
+    .reservation-prompt-text h3 {
+        font-size: 22px;
+    }
+    
+    .reservation-prompt-text p {
+        font-size: 14px;
+    }
+    
+    .reservation-prompt-buttons {
+        width: 100%;
+        flex-direction: column;
+    }
+    
+    .btn-reservation-login,
+    .btn-reservation-register {
+        width: 100%;
+    }
+}
+
 /* About Us Section */
 .about-us-section {
     background: transparent;
     padding: 100px 50px;
-    border-top: 1px solid rgba(197, 160, 89, 0.15);
-    border-bottom: 1px solid rgba(197, 160, 89, 0.15);
+    text-align: center;
 }
 
 .about-us-container {
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -3695,10 +3866,17 @@ body.staff-panel-body nav {
     font-family: 'Cinzel', serif;
     font-size: 48px;
     font-weight: 700;
-    color: var(--accent);
-    margin-bottom: 20px;
+    margin-bottom: 60px;
     text-transform: uppercase;
     letter-spacing: 3px;
+}
+
+.about-us-word {
+    color: var(--white);
+}
+
+.us-word {
+    color: var(--accent);
 }
 
 .about-us-subtitle {
@@ -3718,7 +3896,7 @@ body.staff-panel-body nav {
 }
 
 .about-us-text {
-    color: var(--text-light);
+    color: var(--white);
     font-size: 16px;
     line-height: 1.9;
 }
@@ -3729,10 +3907,17 @@ body.staff-panel-body nav {
 
 .about-us-highlight {
     background: var(--dark);
-    padding: 30px;
-    border-left: 4px solid var(--accent);
-    border-radius: 8px;
+    padding: 30px 40px;
+    border-radius: 12px;
+    border: 1px solid rgba(197, 160, 89, 0.2);
     margin: 30px 0;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.about-us-highlight:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(197, 160, 89, 0.2);
+    border-color: rgba(197, 160, 89, 0.4);
 }
 
 .about-us-highlight h3 {
@@ -3745,7 +3930,7 @@ body.staff-panel-body nav {
 }
 
 .about-us-highlight p {
-    color: var(--text-light);
+    color: var(--white);
     font-size: 16px;
     line-height: 1.8;
     margin: 0;
@@ -3753,15 +3938,17 @@ body.staff-panel-body nav {
 
 .about-us-image-wrapper {
     position: relative;
-    border-radius: 16px;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-    border: 8px solid #8B4513;
-    border-style: double;
-    padding: 4px;
-    background: linear-gradient(45deg, #8B4513 0%, #A0522D 50%, #8B4513 100%);
-    background-size: 200% 200%;
-    animation: woodGrain 3s ease-in-out infinite;
+    box-shadow: 0 10px 30px rgba(197, 160, 89, 0.2);
+    border: 1px solid rgba(197, 160, 89, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.about-us-image-wrapper:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(197, 160, 89, 0.3);
+    border-color: var(--accent);
 }
 
 .about-us-image-wrapper img {
@@ -3769,7 +3956,6 @@ body.staff-panel-body nav {
     max-width: 100%;
     height: 500px;
     object-fit: cover;
-    border-radius: 8px;
 }
 
 .about-us-features {
@@ -3781,30 +3967,31 @@ body.staff-panel-body nav {
 
 .about-us-feature {
     background: var(--dark);
-    padding: 35px 25px;
+    padding: 40px 30px;
     border-radius: 12px;
     text-align: center;
     border: 1px solid rgba(197, 160, 89, 0.2);
-    transition: all 0.3s ease;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .about-us-feature:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 40px rgba(197, 160, 89, 0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(197, 160, 89, 0.3);
     border-color: var(--accent);
 }
 
 .about-us-feature-icon {
-    width: 70px;
-    height: 70px;
+    width: 80px;
+    height: 80px;
     background: rgba(197, 160, 89, 0.1);
-    border-radius: 50%;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 20px;
+    margin: 0 auto 25px;
     font-size: 32px;
     color: var(--accent);
+    border: 2px solid var(--accent);
 }
 
 .about-us-feature-title {
@@ -3818,7 +4005,7 @@ body.staff-panel-body nav {
 
 .about-us-feature-text {
     font-size: 14px;
-    color: #bbb;
+    color: var(--text-light);
     line-height: 1.6;
 }
 
@@ -3829,12 +4016,14 @@ body.staff-panel-body nav {
     margin-top: 80px;
     padding: 50px;
     background: var(--dark);
-    border-radius: 16px;
+    border-radius: 12px;
     border: 1px solid rgba(197, 160, 89, 0.2);
 }
 
 .about-us-stat {
     text-align: center;
+    position: relative;
+    padding: 20px;
 }
 
 .about-us-stat-number {
@@ -3848,7 +4037,7 @@ body.staff-panel-body nav {
 
 .about-us-stat-label {
     font-size: 14px;
-    color: var(--text-light);
+    color: var(--white);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -4481,7 +4670,7 @@ body.staff-panel-body nav {
     .hero-title {
         font-size: 36px;
         letter-spacing: 2px;
-    }
+}
     .hero-subtitle {
         font-size: 20px;
     }
@@ -5737,18 +5926,6 @@ body.staff-panel-body nav {
     font-weight: 500;
 }
 
-    margin-top: 20px;
-    padding: 12px 15px;
-    background: #e7f3ff;
-    border-left: 4px solid #219f3F;
-    border-radius: 8px;
-    font-size: 13px;
-    color: #0d47a1;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
 .staff-login-note i {
     font-size: 16px;
     color: #219f3F;
@@ -5960,7 +6137,7 @@ body.staff-panel-body nav {
     }
     
     .about-page-hero-image img {
-        height: 300px;
+        height: 500px;
     }
     
     .about-page-philosophy-grid {
@@ -6068,4 +6245,5 @@ body.staff-panel-body nav {
         padding: 10px 20px;
         font-size: 14px;
     }
+}
 }
